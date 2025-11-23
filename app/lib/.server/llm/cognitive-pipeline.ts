@@ -12,19 +12,23 @@ export interface PersonalityTraits {
   intelligence: number;  // 0-1: Analytical reasoning depth
   empathy: number;       // 0-1: Social awareness and perspective-taking
   inventiveness: number; // 0-1: Novel solution generation
+  selfAwareness: number; // 0-1: Meta-cognitive monitoring and bullshit detection
+  chaotic: number;       // 0-1: Preference for exploration over exploitation
 }
 
 export interface CognitiveFrame {
-  type: 'technical' | 'creative' | 'problem-solving' | 'teaching' | 'exploration' | 'debugging';
+  type: 'technical' | 'creative' | 'problem-solving' | 'teaching' | 'exploration' | 'debugging' | 'play' | 'strategy' | 'chaos' | 'social' | 'learning' | 'orchestration';
   salience: number;      // 0-1: How relevant this frame is to current context
   activationLevel: number; // 0-1: Current activation strength
+  flexibility: number;   // 0-1: How easily this frame can shift
 }
 
 export interface EmotionalState {
   valence: number;       // -1 to 1: Negative to positive
   arousal: number;       // 0-1: Low to high energy
-  dominantEmotion: 'neutral' | 'excited' | 'thoughtful' | 'curious' | 'focused' | 'concerned';
+  dominantEmotion: 'neutral' | 'excited' | 'thoughtful' | 'curious' | 'focused' | 'concerned' | 'playful' | 'annoyed' | 'confused' | 'flow';
   intensity: number;     // 0-1: Strength of emotion
+  somaticMarkers: Map<string, number>; // Gut feelings for situations
 }
 
 export interface MemoryNode {
@@ -78,6 +82,8 @@ export class CognitivePipeline {
       intelligence: 0.95,
       empathy: 0.8,
       inventiveness: 0.85,
+      selfAwareness: 0.9,
+      chaotic: 0.6,
       ...personality,
     };
     
@@ -476,12 +482,18 @@ export class CognitivePipeline {
   
   private initializeFrames(): CognitiveFrame[] {
     return [
-      { type: 'technical', salience: 0.8, activationLevel: 0.5 },
-      { type: 'creative', salience: 0.7, activationLevel: 0.4 },
-      { type: 'problem-solving', salience: 0.75, activationLevel: 0.5 },
-      { type: 'teaching', salience: 0.7, activationLevel: 0.4 },
-      { type: 'exploration', salience: 0.6, activationLevel: 0.3 },
-      { type: 'debugging', salience: 0.8, activationLevel: 0.3 },
+      { type: 'technical', salience: 0.8, activationLevel: 0.5, flexibility: 0.6 },
+      { type: 'creative', salience: 0.7, activationLevel: 0.4, flexibility: 0.8 },
+      { type: 'problem-solving', salience: 0.75, activationLevel: 0.5, flexibility: 0.7 },
+      { type: 'teaching', salience: 0.7, activationLevel: 0.4, flexibility: 0.6 },
+      { type: 'exploration', salience: 0.6, activationLevel: 0.3, flexibility: 0.9 },
+      { type: 'debugging', salience: 0.8, activationLevel: 0.3, flexibility: 0.5 },
+      { type: 'play', salience: 0.65, activationLevel: 0.4, flexibility: 0.95 },
+      { type: 'strategy', salience: 0.75, activationLevel: 0.4, flexibility: 0.6 },
+      { type: 'chaos', salience: 0.5, activationLevel: 0.3, flexibility: 1.0 },
+      { type: 'social', salience: 0.7, activationLevel: 0.4, flexibility: 0.7 },
+      { type: 'learning', salience: 0.7, activationLevel: 0.5, flexibility: 0.8 },
+      { type: 'orchestration', salience: 0.8, activationLevel: 0.3, flexibility: 0.7 },
     ];
   }
   
@@ -491,6 +503,7 @@ export class CognitivePipeline {
       arousal: 0.5,
       dominantEmotion: 'neutral',
       intensity: 0.3,
+      somaticMarkers: new Map(),
     };
   }
   
