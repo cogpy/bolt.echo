@@ -6,7 +6,7 @@
   "main": "build/electron/main/index.mjs",
   "private": true,
   "license": "MIT",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@9.4.0",
   "sideEffects": false,
   "type": "module",
   "scripts": {
