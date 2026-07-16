@@ -27,6 +27,7 @@ dist-ssr
 .env*
 !.env.example
 *.vars
+.dev.vars
 .wrangler
 _worker.bundle
 

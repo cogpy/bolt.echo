@@ -26,7 +26,7 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # Step 3: Setup pnpm
       - name: Setup pnpm
@@ -57,7 +57,7 @@ jobs:
 
       # Step 9: Deploy to Cloudflare Pages
       - name: Deploy to Cloudflare Pages
-        run: wrangler pages deploy build/client --project-name boltecho
+        run: wrangler pages deploy build/client --project-name bolt-echo
         continue-on-error: true
 
       # Step 10: Verify deployment
@@ -65,4 +65,4 @@ jobs:
         run: |
           echo "Checking deployment status..."
           sleep 10  # Wait a bit for deployment to process
-          wrangler pages deployment list --project-name boltecho --json | head -20
+          wrangler pages deployment list --project-name bolt-echo --json | head -20

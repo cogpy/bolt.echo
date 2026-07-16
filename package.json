@@ -6,11 +6,11 @@
   "main": "build/electron/main/index.mjs",
   "private": true,
   "license": "MIT",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@9.4.0",
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "deploy": "pnpm run build:pages && wrangler pages deploy build/client --project-name boltecho",
+    "deploy": "pnpm run build:pages && wrangler pages deploy build/client --project-name bolt-echo",
     "build": "remix vite:build --force",
     "build:pages": "./build-pages.sh",
     "dev": "remix vite:dev",

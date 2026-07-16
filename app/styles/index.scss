@@ -12,4 +12,8 @@ html,
 body {
   height: 100%;
   width: 100%;
+  background-color: var(--bolt-elements-bg-depth-1);
+  color: var(--bolt-elements-textPrimary);
+  margin: 0;
+  padding: 0;
 }
