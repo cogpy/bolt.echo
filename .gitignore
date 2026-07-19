@@ -35,3 +35,9 @@ _worker.bundle
 .viteconfig/*.timestamp-*
 
 .windsurfrules
+
+# Windows SDK packages and generated files
+.winapp
+
+# Development certificate
+devcert.pfx
