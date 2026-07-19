@@ -41,3 +41,7 @@ _worker.bundle
 
 # Development certificate
 devcert.pfx
+
+# MSIX build artifacts
+*.msix
+devcert.pfx
