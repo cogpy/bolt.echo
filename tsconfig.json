@@ -32,5 +32,9 @@
     "**/.client/**/*.tsx",
     "scripts/cleanup-workers.ts.old",
     "scripts/list-workers.ts.old"
+  ],
+  "exclude": [
+    "node_modules",
+    "dan-examples"
   ]
 }

@@ -34,7 +34,7 @@ export interface ResponsePattern {
  */
 export class NeuroPersona {
   private config: NeuroPersonaConfig;
-  private responsePatterns: ResponsePattern[];
+  private responsePatterns!: ResponsePattern[];
   
   constructor(config?: Partial<NeuroPersonaConfig>) {
     this.config = {

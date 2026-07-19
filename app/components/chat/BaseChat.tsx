@@ -1,4 +1,4 @@
-import type { Message } from 'ai';
+import type { UIMessage as Message } from 'ai';
 import React, { type RefCallback } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { Menu } from '~/components/sidebar/Menu.client';

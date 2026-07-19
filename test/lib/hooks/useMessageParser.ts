@@ -1,4 +1,4 @@
-import type { Message } from 'ai';
+import type { UIMessage as Message } from 'ai';
 import { useCallback, useState } from 'react';
 import { StreamingMessageParser } from '~/lib/runtime/message-parser';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -52,7 +52,11 @@ export function useMessageParser() {
 
     for (const [index, message] of messages.entries()) {
       if (message.role === 'assistant') {
-        const newParsedContent = messageParser.parse(message.id, message.content);
+        const textContent = message.parts
+          .filter((p): p is { type: 'text'; text: string } => p.type === 'text')
+          .map((p) => p.text)
+          .join('');
+        const newParsedContent = messageParser.parse(message.id, textContent);
 
         setParsedMessages((prevParsed) => ({
           ...prevParsed,

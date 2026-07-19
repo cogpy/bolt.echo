@@ -281,6 +281,7 @@ export class CognitivePipeline {
       arousal,
       dominantEmotion,
       intensity: Math.abs(valence) * arousal,
+      somaticMarkers: new Map(),
     };
     
     return this.emotionalState;
