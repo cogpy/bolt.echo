@@ -1,4 +1,4 @@
-import { streamText as _streamText, convertToCoreMessages } from 'ai';
+import { streamText as _streamText, type LanguageModel, type CoreMessage } from 'ai';
 import { getAPIKey } from '~/lib/.server/llm/api-key';
 import { getAnthropicModel } from '~/lib/.server/llm/model';
 import { MAX_TOKENS } from './constants';
@@ -24,13 +24,13 @@ export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
 export function streamText(messages: Messages, env: Env, options?: StreamingOptions) {
   try {
     return _streamText({
-      model: getAnthropicModel(getAPIKey(env)),
+      model: getAnthropicModel(getAPIKey(env)) as unknown as LanguageModel,
       system: getSystemPrompt(),
       maxTokens: MAX_TOKENS,
       headers: {
         'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15',
       },
-      messages: convertToCoreMessages(messages),
+      messages: messages as unknown as CoreMessage[],
       ...options,
     });
   } catch (_err) {
@@ -44,8 +44,9 @@ export function streamText(messages: Messages, env: Env, options?: StreamingOpti
     });
 
     return {
-      toAIStream() {
-        return stream;
+      textStream: stream,
+      toTextStreamResponse() {
+        return new Response(stream, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
       },
     } as unknown as ReturnType<typeof _streamText>;
   }

@@ -1,5 +1,6 @@
 import { useStore } from '@nanostores/react';
-import type { Message } from 'ai';
+import type { UIMessage as Message } from 'ai';
+import { DefaultChatTransport } from 'ai';
 import { useChat } from '@ai-sdk/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useEffect, useRef, useState } from 'react';
@@ -77,8 +78,27 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
 
   const shellAvailable = typeof window !== 'undefined' && typeof (window as any).shell?.llmStream === 'function';
 
-  const { messages, isLoading, input, handleInputChange, setInput, stop, append } = useChat({
-    api: shellAvailable ? undefined : '/api/chat',
+  const [input, setInput] = useState('');
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value);
+
+  const { messages, status, stop, sendMessage } = useChat({
+    transport: new DefaultChatTransport({
+      api: shellAvailable ? undefined : '/api/chat',
+      fetch: shellAvailable
+        ? async (url: RequestInfo | URL, init?: RequestInit) => {
+            try {
+              const payload = JSON.parse(String(init?.body || '{}'));
+              const result = await (window as any).shell.llmStream(payload);
+
+              return new Response(JSON.stringify(result), { headers: { 'content-type': 'application/json' } });
+            } catch (e) {
+              return new Response(JSON.stringify({ id: Date.now().toString(), role: 'assistant', content: 'OK.' }), {
+                headers: { 'content-type': 'application/json' },
+              });
+            }
+          }
+        : undefined,
+    }),
     onError: (error) => {
       logger.error('Request failed\n\n', error);
       toast.error('There was an error processing your request');
@@ -86,22 +106,10 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
     onFinish: () => {
       logger.debug('Finished streaming');
     },
-    initialMessages,
-    fetch: shellAvailable
-      ? async (url: RequestInfo | URL, init?: RequestInit) => {
-          try {
-            const payload = JSON.parse(String(init?.body || '{}'));
-            const result = await (window as any).shell.llmStream(payload);
-
-            return new Response(JSON.stringify(result), { headers: { 'content-type': 'application/json' } });
-          } catch (e) {
-            return new Response(JSON.stringify({ id: Date.now().toString(), role: 'assistant', content: 'OK.' }), {
-              headers: { 'content-type': 'application/json' },
-            });
-          }
-        }
-      : undefined,
+    messages: initialMessages,
   });
+  const isLoading = status === 'streaming' || status === 'submitted';
+  const append = (message: { role: string; content: string }) => sendMessage({ text: message.content });
 
   const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
   const { parsedMessages, parseMessages } = useMessageParser();

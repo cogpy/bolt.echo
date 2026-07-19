@@ -34,7 +34,6 @@ export default defineConfig((config) => {
           v3_fetcherPersist: true,
           v3_relativeSplatPath: true,
           v3_throwAbortReason: true,
-          v3_lazyRouteDiscovery: true,
         },
         serverModuleFormat: 'esm',
       }),
@@ -66,9 +65,7 @@ export default defineConfig((config) => {
     ],
     css: {
       preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
+        scss: {},
       },
     },
   };

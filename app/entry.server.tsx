@@ -15,7 +15,7 @@ export default async function handleRequest(
   _loadContext: AppLoadContext,
 ) {
   try {
-    const head = renderHeadToString({ request, remixContext, Head });
+    const head = renderHeadToString({ request, remixContext: remixContext as any, Head });
 
     // Prefer edge/web streams if available; otherwise fallback to Node pipeable stream
     const maybeRenderToReadableStream: unknown = (ReactDOMServer as unknown as Record<string, unknown>)
@@ -27,7 +27,7 @@ export default async function handleRequest(
         options?: { signal?: AbortSignal; onError?: (error: unknown) => void },
       ) => ReadableStream<Uint8Array> & { allReady?: Promise<void> };
 
-      const readable = await renderToReadableStream(<RemixServer context={remixContext} url={request.url} />, {
+      const readable = await renderToReadableStream(<RemixServer context={remixContext as any} url={request.url} />, {
         signal: request.signal,
         onError(error: unknown) {
           console.error(error);
@@ -108,7 +108,7 @@ export default async function handleRequest(
         `<!DOCTYPE html><html lang="en" data-theme="light"><head>${head}</head><body><div id="root" class="w-full h-full">`,
       );
 
-      const { pipe } = renderToPipeableStream(<RemixServer context={remixContext} url={request.url} />, {
+      const { pipe } = renderToPipeableStream(<RemixServer context={remixContext as any} url={request.url} />, {
         onShellReady() {
           pipe(shell);
         },

@@ -1,4 +1,4 @@
-import { streamText as _streamText, type CoreMessage } from 'ai';
+import { streamText as _streamText, type CoreMessage, type LanguageModel } from 'ai';
 import { getAPIKey } from '~/lib/.server/llm/api-key';
 import { getAnthropicModel } from '~/lib/.server/llm/model';
 import { MAX_TOKENS } from './constants';
@@ -50,7 +50,7 @@ export async function streamText(messages: Messages, env: Env, options?: Streami
   
   // Stream with enhanced system prompt
   return _streamText({
-    model: getAnthropicModel(getAPIKey(env)),
+    model: getAnthropicModel(getAPIKey(env)) as unknown as LanguageModel,
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
     headers: {
@@ -66,7 +66,7 @@ export async function streamText(messages: Messages, env: Env, options?: Streami
  */
 export function streamTextLegacy(messages: Messages, env: Env, options?: StreamingOptions) {
   return _streamText({
-    model: getAnthropicModel(getAPIKey(env)),
+    model: getAnthropicModel(getAPIKey(env)) as unknown as LanguageModel,
     system: getSystemPrompt(),
     maxTokens: MAX_TOKENS,
     headers: {
