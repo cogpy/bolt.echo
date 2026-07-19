@@ -4,7 +4,7 @@ inputs:
   pnpm-version:
     required: false
     type: string
-    default: '10.14.0'
+    default: '9.4.0'
   node-version:
     required: false
     type: string
@@ -30,4 +30,3 @@ runs:
       run: |
         pnpm install
         pnpm run build
-
