@@ -81,7 +81,12 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
   const [input, setInput] = useState('');
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value);
 
-  const { messages, status, stop, sendMessage } = useChat({
+  const {
+    messages,
+    status,
+    stop,
+    sendMessage: sendChatMessage,
+  } = useChat({
     transport: new DefaultChatTransport({
       api: shellAvailable ? undefined : '/api/chat',
       fetch: shellAvailable
@@ -109,7 +114,7 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
     messages: initialMessages,
   });
   const isLoading = status === 'streaming' || status === 'submitted';
-  const append = (message: { role: string; content: string }) => sendMessage({ text: message.content });
+  const append = (message: { role: string; content: string }) => sendChatMessage({ text: message.content });
 
   const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
   const { parsedMessages, parseMessages } = useMessageParser();

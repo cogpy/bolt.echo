@@ -19,14 +19,14 @@ interface Message {
 
 export type Messages = Message[];
 
-export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
+export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model' | 'messages' | 'prompt'>;
 
 export function streamText(messages: Messages, env: Env, options?: StreamingOptions) {
   try {
     return _streamText({
       model: getAnthropicModel(getAPIKey(env)) as unknown as LanguageModel,
       system: getSystemPrompt(),
-      maxTokens: MAX_TOKENS,
+      maxOutputTokens: MAX_TOKENS,
       headers: {
         'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15',
       },
